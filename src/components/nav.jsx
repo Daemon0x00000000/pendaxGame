@@ -13,7 +13,7 @@ const Nav = () => {
         <nav>
             <ul>
                 <li>
-                    <NavLink style={checkIsActive} to="/GamePage">Jeux du pendu</NavLink>
+                    <NavLink style={checkIsActive} to="/game">Jeux du pendu</NavLink>
                 </li>
                 <li>
                     <NavLink style={checkIsActive} to="/stats">Statistique</NavLink>
