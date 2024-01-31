@@ -25,9 +25,7 @@ function App() {
     <Routes>
       {/* <Route path="/game" element={<GamePage />} /> */}
       {/* <Route path="/stats" element={<StatsPage />} /> */}
-      <Route path="*" element={
-        <main><p>Page Error 404 !</p></main>
-      } />
+      <Route path="*" element={<ErrorPage />} />
     </Routes>
     </BrowserRouter>
     </>
