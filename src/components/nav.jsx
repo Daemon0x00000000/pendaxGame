@@ -16,12 +16,12 @@ const Nav = () => {
                     <NavLink style={checkIsActive} to="/home">Accueil</NavLink>
                 </li>
                 <li>
-                    <NavLink style={checkIsActive} to="/GamePage">Jouer</NavLink>
+                    <NavLink style={checkIsActive} to="/game">Jouer</NavLink>
                 </li>
                 <li>
                     <NavLink style={checkIsActive} to="/stats">Statistiques</NavLink>
                 </li>
-                </ul>
+            </ul>
         </nav>
     )
 }
