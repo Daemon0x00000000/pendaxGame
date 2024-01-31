@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import './App.css'
+import './styles/index.scss'
 import { Routes, Route, BrowserRouter } from 'react-router-dom'
 // import GamePage from './components/Game'
 // import stats from './components/stats'
