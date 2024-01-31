@@ -1,10 +1,15 @@
 .error-page {
     text-align: center;
     padding: 50px;
+    background-color: grey;
+    color: white;
+    border-radius: 20px;
+    padding: 20px;
   }
   
   .error-page h1 {
     font-size: 3em;
+    color: RED;
   }
   
   .error-page h2 {
@@ -20,7 +25,7 @@
     margin-top: 20px;
     padding: 10px 20px;
     color: white;
-    background-color: #007BFF;
+    background-color: red;
     text-decoration: none;
     border-radius: 5px;
   }

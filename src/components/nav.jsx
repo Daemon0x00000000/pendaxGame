@@ -13,15 +13,15 @@ const Nav = () => {
         <nav>
             <ul>
                 <li>
-                    <NavLink style={checkIsActive} to="/GamePage">Jeux du pendu</NavLink>
+                    <NavLink style={checkIsActive} to="/home">Accueil</NavLink>
                 </li>
                 <li>
-                    <NavLink style={checkIsActive} to="/stats">Statistique</NavLink>
+                    <NavLink style={checkIsActive} to="/GamePage">Jouer</NavLink>
                 </li>
                 <li>
-                    <NavLink style={checkIsActive} to="/Home">Home</NavLink>
+                    <NavLink style={checkIsActive} to="/stats">Statistiques</NavLink>
                 </li>
-            </ul>
+                </ul>
         </nav>
     )
 }

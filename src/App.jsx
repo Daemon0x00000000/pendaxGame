@@ -1,7 +1,10 @@
 import { useState } from 'react'
+import logo from './logo.png'; // Remplacez 'path_to_your_logo' par le chemin réel de votre image de logo
 import './App.css'
 import './styles/index.scss'
 import { Routes, Route, BrowserRouter } from 'react-router-dom'
+import ErrorPage from './components/error'
+import HomePage from './components/home'
 // import GamePage from './components/Game'
 // import stats from './components/stats'
 import Nav from './components/nav'
@@ -12,18 +15,18 @@ function App() {
   return (
     <>
     
-        <h1 style={{
-            textAlign: 'center',
-            fontSize: '4rem',
-            color: 'white',
-            fontFamily: 'sans-serif',
-            fontWeight: 'bold',
+    <img src={logo} alt="Pendax Game" style={{
+            display: 'block',
+            marginLeft: 'auto',
+            marginRight: 'auto',
+            width: '50%',
             marginTop: '5rem'
-        }}>Pendax Game</h1>
+        }} />
         <BrowserRouter>
     <Nav/>
     <Routes>
-      {/* <Route path="/game" element={<GamePage />} /> */}
+      {/* <Route path="/GamePage" element={<GamePage />} /> */}
+      <Route path="/home" element={<HomePage />} />
       {/* <Route path="/stats" element={<StatsPage />} /> */}
       <Route path="*" element={<ErrorPage />} />
     </Routes>
