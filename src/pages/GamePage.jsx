@@ -8,6 +8,7 @@ export const GamePage = () => {
     const [stats, setStats] = useContext(StatsContext)
     const [motProposer, setMotProposer] = useState('')
     const [pseudo, setPseudo] = useState('')
+    const [capturing, setCapturing] = useState(false)
 
     const gameReducer = (state, action) => {
         switch (action.type) {
@@ -67,22 +68,28 @@ export const GamePage = () => {
         score: 0,
         letterFails: 0,
         lettersFound: [],
-        lost: false,
-        won: true
+        lost: true,
+        won: false
     })
 
     useEffect(() => {
-        fetch('https://trouve-mot.fr/api/random')
-            .then(response => response.json())
-            .then(data => {
-                dispatch({type: 'SET_WORD', payload: {word: data[0].name.toUpperCase()}})
-            })
-    }, []);
+        if (game.won === false) {
+            fetch('https://trouve-mot.fr/api/random')
+                .then(response => response.json())
+                .then(data => {
+                    dispatch({type: 'SET_WORD', payload: {word: data[0].name.toUpperCase()}})
+                    console.log(
+                        data[0].name.toUpperCase()
+                    );
+                })
+        }
+    }, [game.won]);
 
     const handleLetterClick = (letter) => {
+        if (capturing || game.won || game.lost) return
+        // Check if it's letter and not special character
         letter = letter.toUpperCase()
-        console.log(letter);
-        console.log(game.word);
+        if ('ABCDEFGHIJKLMNOPQRSTUVWXYZ'.includes(letter) === false) return
         if (game.word.includes(letter)) {
             dispatch({type: 'GOOD_LETTER', payload: {letter: letter}})
             if (game.word.length === game.lettersFound.length + 1) {
@@ -114,8 +121,10 @@ export const GamePage = () => {
 
     const saveScore = () => {
         if (pseudo === '') return
-        if (stats.scores.find(score => score.name === pseudo)) {
+        console.log(stats)
+        if (stats.scores && stats.scores.find(score => score.name === pseudo)) {
             setStats({...stats, scores: stats.scores.map(score => {
+
                 if (score.name === pseudo) {
                     return {
                         ...score,
@@ -126,6 +135,7 @@ export const GamePage = () => {
                 }
             })})
         } else {
+
             setStats({...stats, scores: [
                 ...stats.scores,
                 {
@@ -136,7 +146,7 @@ export const GamePage = () => {
         }
     }
 
-    //useKeyboard(handleLetterClick)
+    useKeyboard(handleLetterClick)
     return (
         <>
             {!game.lost && !game.won && (
@@ -167,7 +177,9 @@ export const GamePage = () => {
                 </div>
 
                 <div className="motEnter">
-                    <input value={motProposer} type="text" placeholder="Proposer un mot" onKeyUp={(event) => {
+                    <input onFocus={() => setCapturing(true)} onBlur={() => {
+                        setCapturing(false)
+                    }} value={motProposer} type="text" placeholder="Proposer un mot" onKeyUp={(event) => {
                         if (event.key === 'Enter') {
                             handleWordClick()
                         }
@@ -177,7 +189,7 @@ export const GamePage = () => {
             </div>
             )}
             {game.lost && !game.won && (
-                <div className="lost">
+                <div className="won">
                     <h1>Perdu !</h1>
                     <button onClick={reload}>Rejouer</button>
                 </div>
@@ -186,13 +198,19 @@ export const GamePage = () => {
                 <div className="won">
                     <h1>Gagné !</h1>
                     <div className="score">Score: {game.score}</div>
-                    <input type="text" placeholder="Pseudo" value={pseudo} onChange={(event) => setPseudo(event.target.value)}
+                    <input onFocus={() => setCapturing(true)} onBlur={() => setCapturing(false)} type="text" placeholder="Pseudo" value={pseudo} onChange={(event) => setPseudo(event.target.value)}
                             onKeyUp={(event) => {
                                  if (event.key === 'Enter') {
                                       saveScore()
                                  }
                             }}
-                    />
+                    style={{
+                        marginBottom: '1rem',
+                        backgroundColor: 'white',
+                        color: 'black',
+                        padding: '0.5rem',
+                        borderRadius: '5px',
+                    }}/>
                     <div className="actions">
                         <button onClick={reload}>Rejouer</button>
                         <button onClick={saveScore}>Sauvegarder</button>

@@ -1,4 +1,4 @@
-import {createContext, useState} from "react";
+import {createContext, useEffect, useState} from "react";
 import './App.css'
 import './styles/index.scss'
 import { Routes, Route, BrowserRouter } from 'react-router-dom'
@@ -9,14 +9,26 @@ import ErrorPage from './components/error'
 import HomePage from './components/home'
 import {GamePage} from "./pages/GamePage.jsx";
 import logo from './logo.png'
+import {StatsPage} from "./pages/StatsPage.jsx";
 
 export const StatsContext = createContext({})
 function App() {
-    const [stats, setStats] = useState({
-        scores: [
-            // { name: 'John', score: 10 },
-        ]
+    const [stats, setStats] = useState(() => {
+        const localData = localStorage.getItem('stats')
+        return localData ? JSON.parse(localData) : {scores:[]}
     })
+
+    const [firstRender, setFirstRender] = useState(true)
+
+    useEffect(() => {
+        if (!firstRender) {
+            localStorage.setItem('stats', JSON.stringify(stats))
+            console.log('stats updated')
+        } else {
+            setFirstRender(false)
+        }
+    }, [stats,firstRender]);
+
   return (
       <StatsContext.Provider value={[stats, setStats]}>
           <img src={logo} alt="Pendax Game" style={{
@@ -31,7 +43,7 @@ function App() {
               <Routes>
                   <Route path="/game" element={<GamePage/>}/>
                   <Route path="/home" element={<HomePage/>}/>
-                  {/* <Route path="/stats" element={<StatsPage />} /> */}
+                  <Route path="/stats" element={<StatsPage />} />
                   <Route path="*" element={<ErrorPage/>}/>
               </Routes>
           </BrowserRouter>

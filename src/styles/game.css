@@ -112,7 +112,8 @@
     font-size: 1.5rem;
     margin: 0.5rem 0.5rem;
     padding: 0.5rem;
-    border: 1px solid #000;
+    background: #fff;
+    border-color: orange;
     border-radius: 0.5rem;
     cursor: pointer;
     transition: all 0.3s ease;
@@ -144,3 +145,50 @@
     margin: 0;
 }
 
+.actions {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+
+    & > button {
+        padding: 10px 20px;
+        border: none;
+        background-color: #240439;
+        color: white;
+        font-size: 16px;
+        cursor: pointer;
+
+        &:hover {
+            background-color: #440080;
+        }
+    }
+}
+
+.statsTable {
+    width: 100%;
+    border-collapse: collapse;
+
+    th, td {
+        border: 1px solid black;
+        padding: 8px;
+    }
+
+    th {
+        text-align: left;
+        background-color: #f2f2f2;
+    }
+
+
+
+    th {
+        background-color: darkorange;
+        color: white;
+    }
+
+    th, td {
+        text-align: left;
+        padding: 8px;
+    }
+
+
+}
