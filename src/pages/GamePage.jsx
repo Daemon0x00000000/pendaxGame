@@ -2,6 +2,7 @@ import {useContext, useEffect, useReducer, useState} from "react";
 import {StatsContext} from "../App.jsx";
 import '../styles/game.css'
 import {useKeyboard} from "../hooks/useKeyboard.js";
+import {useNavigate} from "react-router-dom";
 
 
 export const GamePage = () => {
@@ -9,6 +10,7 @@ export const GamePage = () => {
     const [motProposer, setMotProposer] = useState('')
     const [pseudo, setPseudo] = useState('')
     const [capturing, setCapturing] = useState(false)
+    const navigate = useNavigate();
 
     const gameReducer = (state, action) => {
         switch (action.type) {
@@ -24,6 +26,9 @@ export const GamePage = () => {
                     letterFails: state.letterFails + 1
                 }
             case 'GOOD_LETTER':
+                if (state.lettersFound.includes(action.payload.letter)) {
+                    return state
+                }
                 return {
                     ...state,
                     lettersFound: [...state.lettersFound, action.payload.letter]
@@ -68,28 +73,30 @@ export const GamePage = () => {
         score: 0,
         letterFails: 0,
         lettersFound: [],
-        lost: true,
+        lost: false,
         won: false
     })
 
     useEffect(() => {
-        if (game.won === false) {
+        if (game.won === false && game.lost === false && game.word === ''){
             fetch('https://trouve-mot.fr/api/random')
                 .then(response => response.json())
                 .then(data => {
-                    dispatch({type: 'SET_WORD', payload: {word: data[0].name.toUpperCase()}})
+                    dispatch({type: 'SET_WORD', payload: {word: data[0].name.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toUpperCase()}})
                     console.log(
                         data[0].name.toUpperCase()
                     );
                 })
         }
-    }, [game.won]);
+        console.log(game.won,game.lost, 'STATUT');
+    }, [game.won, game.lost]);
 
     const handleLetterClick = (letter) => {
         if (capturing || game.won || game.lost) return
         // Check if it's letter and not special character
         letter = letter.toUpperCase()
         if ('ABCDEFGHIJKLMNOPQRSTUVWXYZ'.includes(letter) === false) return
+        // Unaccent word
         if (game.word.includes(letter)) {
             dispatch({type: 'GOOD_LETTER', payload: {letter: letter}})
             if (game.word.length === game.lettersFound.length + 1) {
@@ -144,6 +151,7 @@ export const GamePage = () => {
                 }
             ]})
         }
+        navigate('/stats')
     }
 
     useKeyboard(handleLetterClick)
